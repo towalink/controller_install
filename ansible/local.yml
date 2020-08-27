@@ -1,0 +1,24 @@
+---
+- name: main task
+  hosts: localhost
+  connection: local
+  vars_files:
+    - vars/external_vars.yml
+  vars_prompt:
+    - name: input_welcomeprompt
+      prompt: "
+               ########################\n
+               # Welcome to Towalink! #\n
+               ########################\n
+               Do you want to install the Towalink Controller on this machine?\n
+               Enter any key to continue, CTRL-C to cancel"
+      default: "y"
+      private: no
+    - name: input_monitoring
+      prompt: "Do you want to install monitoring on this machine?"
+      default: "y"
+      private: no
+  roles:
+    - role: controller_basic
+    - role: controller_monitoring
+      when: input_monitoring|lower == 'y'

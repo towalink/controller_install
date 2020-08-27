@@ -1,0 +1,29 @@
+---
+
+- name: Controller Basic - Install required packages (apk)
+  apk:
+    name:
+      - rsync
+      - ansible
+      - py3-virtualenv
+    state: present
+  tags: installation
+  when: ansible_facts['os_family'] == 'Alpine'
+
+- name: Controller Basic - Install required packages (apt)
+  apt:
+    name:
+      - rsync
+      - ansible
+      - python3-virtualenv
+    state: present
+  tags: installation
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Controller Basic - Install required Python modules
+  pip:
+    name:
+      - towalink-tlm
+    state: present
+    virtualenv: "{{ python_venv or omit }}"
+  tags: installation
