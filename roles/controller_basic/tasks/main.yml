@@ -1,4 +1,7 @@
 ---
+- name: Controller Basic - Check for towalink-tlm directory
+  local_action: stat path={{ tlm_path }}
+  register: stat_dir_tlm
 
 - name: Controller Basic - Install required packages (apk)
   apk:
@@ -6,6 +9,7 @@
       - rsync
       - ansible
       - py3-virtualenv
+      - wireguard-tools
     state: present
   tags: installation
   when: ansible_facts['os_family'] == 'Alpine'
@@ -16,14 +20,24 @@
       - rsync
       - ansible
       - python3-virtualenv
+# ToDo: Wireguard is needed but is in buster-backports only
     state: present
   tags: installation
   when: ansible_facts['os_family'] == 'Debian'
 
-- name: Controller Basic - Install required Python modules
+- name: Controller Basic - Install Towalink tlm Python module
   pip:
     name:
       - towalink-tlm
     state: present
     virtualenv: "{{ python_venv or omit }}"
+    virtualenv_site_packages: yes # needed so that "cryptography" does not need to be compiled
   tags: installation
+  when: not stat_dir_tlm.stat.exists
+
+- name: Controller Basic - Install locally available Towalink tlm Python module
+  pip: name={{ tlm_path }}
+       extra_args='-e'
+       virtualenv="{{ python_venv or omit }}"
+       virtualenv_site_packages=yes
+  when: stat_dir_tlm.stat.exists
