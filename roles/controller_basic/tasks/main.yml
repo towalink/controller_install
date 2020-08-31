@@ -8,6 +8,7 @@
     name:
       - rsync
       - ansible
+      - py3-pip
       - py3-virtualenv
       - wireguard-tools
     state: present
@@ -19,6 +20,7 @@
     name:
       - rsync
       - ansible
+      - python3-pip
       - python3-virtualenv
 # ToDo: Wireguard is needed but is in buster-backports only
     state: present

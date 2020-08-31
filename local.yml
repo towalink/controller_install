@@ -15,7 +15,7 @@
       default: "y"
       private: no
     - name: input_monitoring
-      prompt: "Do you want to install monitoring on this machine?"
+      prompt: " Do you want to install monitoring on this machine?"
       default: "y"
       private: no
   roles:
