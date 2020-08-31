@@ -33,6 +33,12 @@ else
   git clone "https://github.com/towalink/controller_install" /opt/towalink/ansible
 fi
 
+# Generate ssh key if needed
+printf "\n# Making sure that root has an ssh key...\n"
+if ! ls /root/.ssh/id*.pub; then
+  ssh-keygen
+fi
+
 # Run Ansible playbook
 printf "\n# Running Ansible...\n"
 ANSIBLE_NOCOWS=1 ansible-playbook /opt/towalink/ansible/local.yml $@
