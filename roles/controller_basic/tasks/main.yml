@@ -22,8 +22,23 @@
       - ansible
       - python3-pip
       - python3-virtualenv
-# ToDo: Wireguard is needed but is in buster-backports only
     state: present
+  tags: installation
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Controller Basic - Add Debian Buster backports repository
+  apt_repository:
+    repo: deb http://http.debian.net/debian buster-backports main contrib
+    state: present
+    update_cache: yes  
+  tags: installation
+  when: (ansible_facts['os_family'] == 'Debian') and (ansible_facts['distribution_release'] == 'buster')
+
+- name: Controller Basic - Install Wireguard (apt)
+  apt:
+    name: wireguard
+    state: present
+    default_release: "{{ 'buster-backports' if (ansible_facts['distribution_release'] == 'buster') else omit }}" 
   tags: installation
   when: ansible_facts['os_family'] == 'Debian'
 
@@ -33,7 +48,7 @@
       - towalink-tlm
     state: present
     virtualenv: "{{ python_venv or omit }}"
-    virtualenv_site_packages: yes # needed so that "cryptography" does not need to be compiled
+    virtualenv_site_packages: yes # needed so that module "cryptography" does not need to be compiled
   tags: installation
   when: not stat_dir_tlm.stat.exists
 
