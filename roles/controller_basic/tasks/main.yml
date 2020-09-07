@@ -21,7 +21,8 @@
       - rsync
       - ansible
       - python3-pip
-      - python3-virtualenv
+      - python3-venv
+#      - python3-virtualenv
     state: present
   tags: installation
   when: ansible_facts['os_family'] == 'Debian'
@@ -48,6 +49,7 @@
       - towalink-tlm
     state: present
     virtualenv: "{{ python_venv or omit }}"
+    virtualenv_command: /usr/bin/python3 -m venv
     virtualenv_site_packages: yes # needed so that module "cryptography" does not need to be compiled
   tags: installation
   when: not stat_dir_tlm.stat.exists
