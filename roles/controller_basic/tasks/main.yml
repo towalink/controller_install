@@ -37,7 +37,9 @@
 
 - name: Controller Basic - Install Wireguard (apt)
   apt:
-    name: wireguard
+    name:
+      - wireguard
+      - wireguard-dkms
     state: present
     default_release: "{{ 'buster-backports' if (ansible_facts['distribution_release'] == 'buster') else omit }}" 
   tags: installation
