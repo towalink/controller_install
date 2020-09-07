@@ -39,6 +39,7 @@
   apt:
     name:
       - wireguard
+      - "linux-headers-{{ ansible_kernel }}"
       - wireguard-dkms
     state: present
     default_release: "{{ 'buster-backports' if (ansible_facts['distribution_release'] == 'buster') else omit }}" 
