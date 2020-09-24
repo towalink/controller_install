@@ -9,7 +9,7 @@
       - rsync
       - ansible
       - py3-pip
-      - py3-virtualenv
+#      - py3-virtualenv
       - wireguard-tools
     state: present
   tags: installation
@@ -21,7 +21,7 @@
       - rsync
       - ansible
       - python3-pip
-      - python3-venv
+#      - python3-venv
 #      - python3-virtualenv
     state: present
   tags: installation
