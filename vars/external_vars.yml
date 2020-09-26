@@ -1,3 +1,4 @@
 ---
+pip_test:
 python_venv: "/opt/towalink/venv"
 tlm_path:

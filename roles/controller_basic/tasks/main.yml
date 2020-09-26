@@ -46,11 +46,29 @@
   tags: installation
   when: ansible_facts['os_family'] == 'Debian'
 
+- name: Controller Basic - Install Towalink tlm Python module prerequisites
+  pip:
+    name:
+      - ansible
+      - jinja2
+      - python-configuration
+      - pyyaml
+      - toml
+      - tomlkit
+      - wgconfig
+    state: present
+    virtualenv: "{{ python_venv or omit }}"
+    virtualenv_command: /usr/bin/python3 -m venv
+    virtualenv_site_packages: yes # needed so that module "cryptography" does not need to be compiled
+  tags: installation
+  when: not stat_dir_tlm.stat.exists
+
 - name: Controller Basic - Install Towalink tlm Python module
   pip:
     name:
       - towalink-tlm
     state: present
+    extra_args: "{{ '--index-url https://test.pypi.org/project/ --no-deps' if pip_test else omit}}"
     virtualenv: "{{ python_venv or omit }}"
     virtualenv_command: /usr/bin/python3 -m venv
     virtualenv_site_packages: yes # needed so that module "cryptography" does not need to be compiled
