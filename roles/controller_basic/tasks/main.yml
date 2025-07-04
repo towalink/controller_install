@@ -9,7 +9,7 @@
       - rsync
       - ansible
       - py3-pip
-      - py3-virtualenv
+#      - py3-virtualenv
       - wireguard-tools
     state: present
   tags: installation
@@ -21,28 +21,17 @@
       - rsync
       - ansible
       - python3-pip
-#      - python3-venv
+      - python3-venv
 #      - python3-virtualenv
     state: present
   tags: installation
   when: ansible_facts['os_family'] == 'Debian'
 
-- name: Controller Basic - Add Debian Buster backports repository
-  apt_repository:
-    repo: deb http://http.debian.net/debian buster-backports main contrib
-    state: present
-    update_cache: yes  
-  tags: installation
-  when: (ansible_facts['os_family'] == 'Debian') and (ansible_facts['distribution_release'] == 'buster')
-
 - name: Controller Basic - Install Wireguard (apt)
   apt:
     name:
       - wireguard
-      - "linux-headers-{{ ansible_kernel }}"
-      - wireguard-dkms
     state: present
-    default_release: "{{ 'buster-backports' if (ansible_facts['distribution_release'] == 'buster') else omit }}" 
   tags: installation
   when: ansible_facts['os_family'] == 'Debian'
 
